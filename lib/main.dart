@@ -18,13 +18,39 @@ class CounterApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  HomeScreenState createState() => HomeScreenState();
+}
+
+class HomeScreenState extends State<HomeScreen> {
+  int counter = 0;
+
+  void incrementCounter() {
+    setState(() {
+      counter++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Counter App')),
-      body: Center(child: Text('Placeholder')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Counter: $counter', style: TextStyle(fontSize: 24)),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: incrementCounter,
+              child: Text('Increment'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
