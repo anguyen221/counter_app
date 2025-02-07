@@ -25,9 +25,25 @@ class HomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   int counter = 0;
   bool isFirstImage = true;
+  late AnimationController controller;
+  late CurvedAnimation curvedAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+    curvedAnimation = CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeInOut,
+    );
+    controller.forward();
+  }
 
   void incrementCounter() {
     setState(() {
@@ -35,10 +51,18 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-    void toggleImage() {
+  void toggleImage() {
     setState(() {
       isFirstImage = !isFirstImage;
     });
+    controller.reset();
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,15 +80,19 @@ class HomeScreenState extends State<HomeScreen> {
               child: Text('Increment'),
             ),
             SizedBox(height: 20),
-            Image.asset(
-              isFirstImage ? 'images/testimage.png' : 'images/testimage1.png',
-              width: 200,
-              height: 200,
+            FadeTransition(
+              opacity: curvedAnimation,
+              child: Image.asset(
+                isFirstImage ? 'images/testimage.png' : 'images/testimage1.png',
+                key: ValueKey<bool>(isFirstImage),
+                width: 200,
+                height: 200,
+              ),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: toggleImage,
-              child: Text('Toggle Image')
+              child: Text('Toggle Image'),
             ),
           ],
         ),
