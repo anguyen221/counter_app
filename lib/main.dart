@@ -27,10 +27,17 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   int counter = 0;
+  bool isFirstImage = true;
 
   void incrementCounter() {
     setState(() {
       counter++;
+    });
+  }
+
+    void toggleImage() {
+    setState(() {
+      isFirstImage = !isFirstImage;
     });
   }
 
@@ -47,6 +54,17 @@ class HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               onPressed: incrementCounter,
               child: Text('Increment'),
+            ),
+            SizedBox(height: 20),
+            Image.asset(
+              isFirstImage ? 'images/testimage.png' : 'images/testimage1.png',
+              width: 200,
+              height: 200,
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: toggleImage,
+              child: Text('Toggle Image')
             ),
           ],
         ),
